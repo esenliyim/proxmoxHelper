@@ -107,7 +107,6 @@ wget https://github.com/moonlight-stream/moonlight-qt/releases/download/v5.0.1/M
 chmod +x /home/moonlight/moonlight-qt
 chown moonlight /home/moonlight/moonlight-qt
 apt-get update &>/dev/null
-# apt-get install -y kodi &>/dev/null
 set +e
 alias die=''
 alias die='EXIT=$? LINE=$LINENO error_exit'
