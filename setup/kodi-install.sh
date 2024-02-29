@@ -87,47 +87,49 @@ set -e
     
 msg_ok "Set Up Hardware Acceleration"  
 
-msg_info "Setting Up kodi user"
-useradd -d /home/kodi -m kodi &>/dev/null
-gpasswd -a kodi audio &>/dev/null
-gpasswd -a kodi video &>/dev/null
-gpasswd -a kodi render &>/dev/null
+msg_info "Setting Up moonlight user"
+useradd -d /home/moonlight -m moonlight &>/dev/null
+gpasswd -a moonlight audio &>/dev/null
+gpasswd -a moonlight video &>/dev/null
+gpasswd -a moonlight render &>/dev/null
 groupadd -r autologin &>/dev/null
-gpasswd -a kodi autologin &>/dev/null
-gpasswd -a kodi input &>/dev/null #to enable direct access to devices
-msg_ok "Set Up kodi user"
+gpasswd -a moonlight autologin &>/dev/null
+gpasswd -a moonlight input &>/dev/null #to enable direct access to devices
+msg_ok "Set Up moonlight user"
 
 msg_info "Installing lightdm"
 DEBIAN_FRONTEND=noninteractive apt-get install -y lightdm &>/dev/null
 echo "/usr/sbin/lightdm" > /etc/X11/default-display-manager
 msg_ok "Installed lightdm"
 
-msg_info "Installing kodi"
+msg_info "Installing moonlight"
+wget https://github.com/moonlight-stream/moonlight-qt/releases/download/v5.0.1/Moonlight-5.0.1-x86_64.AppImage -O /home/moonlight/moonlight-qt
+chmod +x /home/moonlight/moonlight-qt
+chown moonlight /home/moonlight/moonlight-qt
 apt-get update &>/dev/null
-apt-get install -y kodi &>/dev/null
+# apt-get install -y kodi &>/dev/null
 set +e
 alias die=''
-apt-get install --ignore-missing -y kodi-peripheral-joystick &>/dev/null
 alias die='EXIT=$? LINE=$LINENO error_exit'
 set -e
-msg_ok "Installed kodi"
+msg_ok "Installed moonlight-qt"
 
 msg_info "Updating xsession"
-cat <<EOF >/usr/share/xsessions/kodi-alsa.desktop
+cat <<EOF >/usr/share/xsessions/moonlight-alsa.desktop
 [Desktop Entry]
-Name=Kodi-alsa
-Comment=This session will start Kodi media center with alsa support
-Exec=env AE_SINK=ALSA kodi-standalone
-TryExec=env AE_SINK=ALSA kodi-standalone
+Name=Moonlightqt-alsa
+Comment=This session will start moonlight-qt with alsa support
+Exec=env AE_SINK=ALSA /home/moonlight/moonlight-qt
+TryExec=env AE_SINK=ALSA /home/moonlight/moonlight-qt
 Type=Application
 EOF
 msg_ok "Updated xsession"
 
 msg_info "Setting up autologin"
-cat <<EOF >/etc/lightdm/lightdm.conf.d/autologin-kodi.conf
+cat <<EOF >/etc/lightdm/lightdm.conf.d/autologin-moonlight.conf
 [Seat:*]
-autologin-user=kodi
-autologin-session=kodi-alsa
+autologin-user=moonlight
+autologin-session=moonlight-alsa
 EOF
 msg_ok "Set up autologin"
 

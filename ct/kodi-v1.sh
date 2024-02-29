@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo -e "Loading..."
-APP="kodi"
+APP="moonlight"
 var_disk="8"
 var_cpu="2"
 var_ram="2048"
@@ -44,7 +44,7 @@ else
     exit
 fi
 function header_info {
-echo -e "kodi---------\n\n"
+echo -e "moonlight---------\n\n"
 }
 function msg_info() {
     local msg="$1"
